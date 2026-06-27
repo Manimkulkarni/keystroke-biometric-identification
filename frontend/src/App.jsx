@@ -1,17 +1,34 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Home from './pages/Home'
 import Result from './pages/Result'
+import About from './pages/About'
 
 function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
         <nav className="bg-white shadow-md">
-          <div className="max-w-6xl mx-auto px-4 py-3">
+          <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <Link to="/" className="text-2xl font-bold text-indigo-600">
               ⌨️ TypePrint
             </Link>
+            <div className="flex gap-6">
+              <Link to="/" className="text-gray-600 hover:text-indigo-600 transition-colors">
+                Demo
+              </Link>
+              <Link to="/about" className="text-gray-600 hover:text-indigo-600 transition-colors">
+                About
+              </Link>
+              <a 
+                href="https://github.com/Manimkulkarni/keystroke-biometric-identification" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-600 hover:text-indigo-600 transition-colors"
+              >
+                GitHub
+              </a>
+            </div>
           </div>
         </nav>
         
@@ -19,6 +36,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/result" element={<Result />} />
+            <Route path="/about" element={<About />} />
           </Routes>
         </div>
       </div>

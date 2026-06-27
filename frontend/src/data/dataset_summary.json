@@ -1,0 +1,53 @@
+{
+  "overview": {
+    "name": "GREYC-NISLAB Keystroke Benchmark",
+    "users": 110,
+    "samples_per_user": 20,
+    "total_samples": 2200,
+    "passwords": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5"
+    ]
+  },
+  "password_results": [
+    {
+      "Password": "P1",
+      "Features": 64,
+      "Accuracy": 0.7136363636363636
+    },
+    {
+      "Password": "P2",
+      "Features": 68,
+      "Accuracy": 0.7613636363636364
+    },
+    {
+      "Password": "P3",
+      "Features": 68,
+      "Accuracy": 0.7227272727272728
+    },
+    {
+      "Password": "P4",
+      "Features": 84,
+      "Accuracy": 0.8022727272727272
+    },
+    {
+      "Password": "P5",
+      "Features": 92,
+      "Accuracy": 0.8613636363636363
+    }
+  ],
+  "model_results": {
+    "Random Forest": 86.1,
+    "XGBoost": 58.2,
+    "SVM": 82.3,
+    "KNN": 78.9,
+    "Logistic Regression": 65.4
+  },
+  "top_5_accuracy": 97.0,
+  "feature_count": 92,
+  "best_password": "P5",
+  "best_accuracy": 86.1
+}

@@ -12,33 +12,54 @@ function Home() {
   const navigate = useNavigate()
 
   const handleTypingComplete = async (keystrokeData) => {
-    console.log('📊 Keystroke data received:', keystrokeData.length, 'events')
+  console.log('📊 Keystroke data received:', keystrokeData.length, 'events')
+  
+  // Log all events to see what's being captured
+  console.log('📊 All events:', keystrokeData.map(e => ({ 
+    key: e.key, 
+    type: e.type, 
+    timestamp: e.timestamp 
+  })))
+  
+  setIsLoading(true)
+  setError(null)
+  
+  try {
+    // Filter out non-character keys (Backspace, Shift, etc.)
+    const filteredEvents = keystrokeData.filter(event => {
+      // Keep only character keys and space
+      return event.key.length === 1 || event.key === ' '
+    })
     
-    setIsLoading(true)
-    setError(null)
+    console.log('📊 Filtered events (characters only):', filteredEvents.length)
+    console.log('📊 Filtered events:', filteredEvents.map(e => e.key).join(''))
     
-    try {
-      // Extract features from keystroke events
-      console.log('🔧 Extracting features...')
-      const features = extractFeatures(keystrokeData)
-      
-      console.log('📊 Features extracted:', features.length)
-      console.log('📊 Non-zero features:', features.filter(f => f !== 0).length)
-      
-      // Send features to backend (using the feature-based endpoint)
-      console.log('📤 Sending features to backend...')
-      const result = await predict(features)
-      
-      console.log('📥 Prediction result:', result)
-      
-      // Navigate to results page with data
-      navigate('/result', { state: { result } })
-    } catch (err) {
-      console.error('❌ Error:', err)
-      setError(err.message || 'Failed to process typing data')
-      setIsLoading(false)
-    }
+    // Extract features from filtered events
+    console.log('🔧 Extracting features...')
+    const features = extractFeatures(filteredEvents)
+    
+    console.log('📊 Features extracted:', features.length)
+    console.log('📊 Non-zero features:', features.filter(f => f !== 0).length)
+    
+    // Log the first 20 features for comparison
+    console.log('📊 First 20 features:', features.slice(0, 20))
+    console.log('📊 Features 20-40:', features.slice(20, 40))
+    console.log('📊 Features 40-60:', features.slice(40, 60))
+    
+    // Send features to backend
+    console.log('📤 Sending features to backend...')
+    const result = await predict(features)
+    
+    console.log('📥 Prediction result:', result)
+    
+    // Navigate to results page with data
+    navigate('/result', { state: { result, features } })
+  } catch (err) {
+    console.error('❌ Error:', err)
+    setError(err.message || 'Failed to process typing data')
+    setIsLoading(false)
   }
+}
 
   return (
     <div className="max-w-2xl mx-auto">
