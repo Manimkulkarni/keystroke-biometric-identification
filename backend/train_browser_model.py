@@ -8,14 +8,18 @@ from sklearn.preprocessing import LabelEncoder
 from pathlib import Path
 from collections import Counter
 
+
+BASE_DIR = Path(__file__).resolve().parent
+
+
 def train_browser_model():
     """Train a model on browser-collected data"""
     
     # Load data
-    data_path = Path("data/exported/browser_data.csv")
+    data_path = BASE_DIR / "data" / "exported" / "browser_data.csv"
     
     if not data_path.exists():
-        print("❌ No browser data found. Run export_data.py first.")
+        print("ℹ️ No browser data found. Skipping browser model training.")
         return
     
     df = pd.read_csv(data_path)
@@ -31,9 +35,7 @@ def train_browser_model():
     
     # Check if we have enough data
     if len(df) < 10:
-        print("\n❌ Not enough data to train. Need at least 10 samples.")
-        print(f"   Current: {len(df)} samples")
-        print("   Run the Typing Experiment to collect more data!")
+        print(f"⚠️ Not enough browser data ({len(df)} samples). Need at least 10.")
         return
     
     # Prepare features and labels
@@ -79,7 +81,7 @@ def train_browser_model():
     print(f"   Cross-validation (mean): {cv_scores.mean():.4f} (±{cv_scores.std():.4f})")
     
     # Save model
-    model_dir = Path("models")
+    model_dir = BASE_DIR / "models"
     model_dir.mkdir(exist_ok=True)
     
     joblib.dump(model, model_dir / "browser_model.pkl")
@@ -102,6 +104,7 @@ def train_browser_model():
     print("\n✅ Model saved to models/browser_model.pkl")
     
     return model, accuracy, le
+
 
 def train_style_models(df):
     """Train separate models for each typing style"""
@@ -161,17 +164,18 @@ def train_style_models(df):
     
     return results
 
+
 if __name__ == "__main__":
     # Load data
-    data_path = Path("data/exported/browser_data.csv")
+    data_path = BASE_DIR / "data" / "exported" / "browser_data.csv"
+
     if not data_path.exists():
-        print("❌ No browser data found")
-        exit()
-    
-    df = pd.read_csv(data_path)
-    
-    # Train main model
-    model, accuracy, le = train_browser_model()
-    
-    # Train style-specific models
-    style_results = train_style_models(df)
+        print("ℹ️ No browser data found. Skipping browser model training.")
+    else:
+        df = pd.read_csv(data_path)
+
+        # Train main model
+        model, accuracy, le = train_browser_model()
+
+        # Train style-specific models
+        style_results = train_style_models(df)

@@ -5,9 +5,14 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import accuracy_score
-from config import DATA_DIR, MODEL_DIR, FEATURE_COUNT, PASSWORD, MODEL_NAME
 
-DATA_PATH = DATA_DIR / "GREYC-NISLABKeystrokeBenchmarkDatasetSyed.xlsx"
+
+# Get the directory where this script is located
+BASE_DIR = Path(__file__).resolve().parent
+
+# Path to the data file
+DATA_PATH = BASE_DIR / "data" / "GREYC-NISLABKeystrokeBenchmarkDatasetSyed.xlsx"
+
 
 def load_p5():
     """Load P5 dataset"""
@@ -21,6 +26,7 @@ def load_p5():
     y = df["User_ID"]
     
     return X, y
+
 
 def train():
     """Train and save the model"""
@@ -36,7 +42,11 @@ def train():
     
     # Split data
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y_encoded, test_size=0.2, random_state=42, stratify=y_encoded
+        X,
+        y_encoded,
+        test_size=0.2,
+        random_state=42,
+        stratify=y_encoded
     )
     
     print(f"Training set: {X_train.shape[0]} samples")
@@ -56,22 +66,27 @@ def train():
     acc = accuracy_score(y_test, y_pred)
     print(f"Accuracy: {acc:.4f}")
     
+    # Create models directory
+    model_dir = BASE_DIR / "models"
+    model_dir.mkdir(exist_ok=True)
+    
     # Save artifacts
     print("Saving artifacts...")
-    MODEL_DIR.mkdir(exist_ok=True)
     
-    joblib.dump(model, MODEL_DIR / "typeprint_p5_model.pkl")
-    joblib.dump(le, MODEL_DIR / "label_encoder.pkl")
+    joblib.dump(model, model_dir / "typeprint_p5_model.pkl")
+    joblib.dump(le, model_dir / "label_encoder.pkl")
+    
     joblib.dump({
         "feature_count": X.shape[1],
-        "password": PASSWORD,
-        "model_name": MODEL_NAME,
+        "password": "united states of america",
+        "model_name": "RandomForest",
         "accuracy": round(acc, 4),
         "classes": le.classes_.tolist(),
         "n_classes": len(le.classes_)
-    }, MODEL_DIR / "model_metadata.pkl")
+    }, model_dir / "model_metadata.pkl")
     
-    print(" Model saved successfully!")
+    print("✅ Model saved successfully!")
+
 
 if __name__ == "__main__":
     train()

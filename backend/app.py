@@ -7,6 +7,21 @@ from utils.logger import logger
 from utils.error_handler import safe_predict
 from schemas import StoreKeystrokeRequest
 from services.data_collector import data_collector
+import sys
+from pathlib import Path
+
+# Run startup script
+sys.path.insert(0, str(Path(__file__).parent))
+from startup import train_model_if_not_exists
+
+# Train models if they don't exist
+train_model_if_not_exists()
+
+# Then import the rest
+from schemas import PredictionRequest, PredictionResponse, StoreKeystrokeRequest
+from services.predictor import predictor
+from services.data_collector import data_collector
+from utils.logger import logger
 
 
 app = FastAPI(
