@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: typeprint-backend
+    runtime: python
+    repo: https://github.com/Manimkulkarni/keystroke-biometric-identification
+    branch: main
+    plan: free
+    buildCommand: |
+      cd backend
+      pip install -r requirements.txt
+    startCommand: |
+      cd backend
+      uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SECRET_KEY
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.10.0
