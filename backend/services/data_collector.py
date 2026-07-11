@@ -125,6 +125,13 @@ class DataCollector:
             "quality_score": quality_score
         }
         
+        if supabase_client is None:
+            logger.warning("Supabase not configured — keystroke not stored")
+            return {
+                "success": False,
+                "error": "Supabase not configured"
+            }
+
         try:
             response = supabase_client.table(self.table).insert(record).execute()
             
@@ -155,6 +162,8 @@ class DataCollector:
     
     def get_stats(self) -> Dict:
         """Get comprehensive database statistics"""
+        if supabase_client is None:
+            return {"total_samples": 0, "unique_users": 0, "sources": {}, "browsers": {}, "os": {}, "phrases": {}, "avg_typing_speed": 0, "avg_hold_time": 0, "avg_flight_time": 0, "avg_quality_score": 0, "recent_days": {}}
         try:
             # Get all data
             response = supabase_client.table(self.table).select("*").execute()
