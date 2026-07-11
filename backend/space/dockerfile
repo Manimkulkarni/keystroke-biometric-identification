@@ -2,14 +2,14 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Copy requirements first (for better caching)
+# Copy backend requirements
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the entire backend (including static folder)
+# Copy backend code
 COPY backend/ .
 
-# Expose the port
+# Expose port
 EXPOSE 7860
 
 # Start the app

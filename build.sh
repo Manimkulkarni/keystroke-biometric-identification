@@ -1,0 +1,11 @@
+#!/bin/bash
+echo "Building frontend..."
+cd frontend
+npm install
+npm run build
+
+echo "Copying to backend/static..."
+rm -rf ../backend/static
+cp -r dist ../backend/static/
+
+echo "Build complete!"

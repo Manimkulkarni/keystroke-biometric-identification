@@ -145,3 +145,8 @@ async def db_stats():
 async def get_samples(limit: int = 100, source: str = None):
     """Get recent samples"""
     return data_collector.get_samples(limit=limit, source=source)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=7860)
+

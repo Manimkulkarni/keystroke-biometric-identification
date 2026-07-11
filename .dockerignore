@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data
+data/
+*.csv
+*.xlsx
+
+# Git
+.git/
+.gitignore
+
+# Model files (since you have them via Git LFS)
+# But keep .pkl files if they're small
+# If using Logistic Regression (small), keep them
