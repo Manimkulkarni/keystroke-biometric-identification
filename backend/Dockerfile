@@ -2,15 +2,11 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Copy requirements first (for better caching)
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the entire backend (including static folder)
 COPY backend/ .
 
-# Expose the port
-EXPOSE 7860
+EXPOSE 8000
 
-# Start the app
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]

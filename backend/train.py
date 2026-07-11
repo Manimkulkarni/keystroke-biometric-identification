@@ -55,7 +55,9 @@ def train():
     # Train model
     print("Training Random Forest...")
     model = RandomForestClassifier(
-        n_estimators=300,
+        n_estimators=200,
+        max_depth=30,
+        min_samples_split=2,
         random_state=42,
         n_jobs=-1
     )
@@ -71,22 +73,23 @@ def train():
     model_dir.mkdir(exist_ok=True)
     
     # Save artifacts
-    print("Saving artifacts...")
-    
-    joblib.dump(model, model_dir / "typeprint_p5_model.pkl")
+    print("Saving artifacts with LZMA compression...")
+    joblib.dump(model, model_dir / "typeprint_p5_model.pkl", compress=("lzma", 9))
     joblib.dump(le, model_dir / "label_encoder.pkl")
-    
     joblib.dump({
         "feature_count": X.shape[1],
         "password": "united states of america",
-        "model_name": "RandomForest",
+        "model_name": "RandomForest (Optimized + LZMA)",
         "accuracy": round(acc, 4),
+        "n_estimators": 200,
+        "max_depth": 30,
         "classes": le.classes_.tolist(),
         "n_classes": len(le.classes_)
     }, model_dir / "model_metadata.pkl")
     
-    print("✅ Model saved successfully!")
-
+    import os
+    size_mb = os.path.getsize(model_dir / "typeprint_p5_model.pkl") / 1024 / 1024
+    print(f"✅ Model saved successfully! ({size_mb:.2f} MB)")
 
 if __name__ == "__main__":
     train()
